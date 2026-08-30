@@ -1,1 +1,160 @@
-<placeholder-will-fail-if-too-long>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caja Negra Lab — EcoV1 Apex Ultimate</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="frenzy-container" id="frenzy-box">
+    <div class="frenzy-header">
+      <span id="frenzy-label">⚡ MODO FRENESÍ (BULL RUN COMERCIAL)</span>
+      <span id="frenzy-percent">0%</span>
+    </div>
+    <div class="frenzy-track"><div class="frenzy-fill" id="frenzy-fill"></div></div>
+  </div>
+  <div id="sniper-banner" class="sniper-alert">
+    <span>🚨 <b>¡FAT-FINGER BOT EN BANCARROTA!</b> <span id="sniper-text">Lote 75% OFF</span></span>
+    <button class="btn-flash" onclick="executeSniping()">SNIPE YA (<span id="sniper-timer">4</span>s)</button>
+  </div>
+  <div class="hud">
+    <div class="hud-box"><div class="hud-label">Oro Líquido</div><div class="hud-val" id="hud-gold">100</div></div>
+    <div class="hud-box"><div class="hud-label">Vales Forex</div><div class="hud-val" id="hud-tokens" style="color:var(--orange);">0 🎫</div></div>
+    <div class="hud-box"><div class="hud-label">Patrimonio</div><div class="hud-val" id="hud-networth">100</div></div>
+    <div class="hud-box"><div class="hud-label">Rango / Estatus</div><div class="hud-val" id="hud-rank" style="color:var(--purple); font-size:10px;">I: Aprendiz</div></div>
+    <div class="hud-box"><div class="hud-label">Deuda Total</div><div class="hud-val" id="hud-debt" style="color:var(--red);">0 Oro</div></div>
+    <div class="hud-box"><div class="hud-label">Cierre Fiscal</div><div class="hud-val" id="hud-tax" style="color:var(--gold);">60s (-15)</div></div>
+  </div>
+  <div class="ticker">
+    <span><b>SEÑAL MACRO:</b> <span id="news-text">Canales de suministro estables.</span></span>
+    <span id="news-countdown" style="font-weight:800;">--</span>
+  </div>
+  <div class="layout">
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="panel">
+        <div class="panel-header"><span>Producción Asimétrica</span><span id="prod-slots-hud">0/3</span></div>
+        <div style="background:var(--card-alt);padding:5px;border-radius:3px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;"><b>🍅 Tomate (1s)</b><span style="color:var(--text-dim);">40s | Coste: 12</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-tomato"></div></div>
+          <div style="display:flex;gap:3px;margin-top:3px;">
+            <button style="flex:1;" onclick="queueProduction('tomato', 1)">1x (12)</button>
+            <button style="flex:1;" onclick="queueProduction('tomato', 3)">3x (36)</button>
+          </div>
+        </div>
+        <div style="background:var(--card-alt);padding:5px;border-radius:3px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;"><b>🥚 Huevo (2s)</b><span style="color:var(--text-dim);">110s | Coste: 45</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-egg"></div></div>
+          <div style="display:flex;gap:3px;margin-top:3px;">
+            <button style="flex:1;" onclick="queueProduction('egg', 1)">1x (45)</button>
+            <button style="flex:1;" onclick="queueProduction('egg', 2)">2x (90)</button>
+          </div>
+        </div>
+        <div style="background:var(--card-alt);padding:5px;border-radius:3px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;"><b>🪵 Madera (5s)</b><span style="color:var(--text-dim);">310s | Coste: 140</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-wood"></div></div>
+          <div style="display:flex;gap:3px;margin-top:3px;">
+            <button style="flex:1;" onclick="queueProduction('wood', 1)">1x (140)</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Taller & Overdrive</div>
+        <div style="background:var(--card-alt);padding:4px;border-radius:3px;border:1px solid var(--border);">
+          <div style="display:flex;justify-content:space-between;"><b>🥫 Salsa (90s)</b><span style="color:var(--gold);">3 🍅 + 15G</span></div>
+          <div class="progress-track"><div class="progress-fill" id="fill-sauce"></div></div>
+          <div style="display:flex;gap:3px;margin-top:3px;">
+            <button style="flex:1;" class="btn-gold" onclick="startProcessing('sauce', false)">Procesar Normal</button>
+            <button style="flex:1;" class="btn-flash" onclick="startProcessing('sauce', true)">⚡ Overdrive (15s)</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:3px;margin-top:2px;">
+          <button style="flex:1;" class="btn-purple" onclick="pawnWood()">Empeñar Madera (+95G)</button>
+          <button style="flex:1;" class="btn-green" onclick="redeemWood()">Rescatar (115G)</button>
+        </div>
+      </div>
+      <div class="panel" style="background:rgba(188,140,255,0.04);border-color:var(--purple);">
+        <div class="panel-header" style="color:var(--purple);"><span>Reliquias de Estatus Imperial</span><span id="relic-hud">Ninguna</span></div>
+        <div style="font-size:9px;color:var(--text-dim);">Reduce el mantenimiento fiscal un 50%.</div>
+        <button class="btn-purple" onclick="buyImperialRelic()">💎 Subastar Sello del Barón (450 Oro + 10 🎫)</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="panel" style="background:rgba(255,166,87,0.03);border-color:var(--orange);">
+        <div class="panel-header" style="color:var(--orange);"><span>Mercado Cambiario: Vales</span><span>1 🎫 = <b id="token-rate">24</b> Oro</span></div>
+        <div style="display:flex;gap:3px;">
+          <button class="btn-orange" style="flex:1;" onclick="exchangeTokens('buy')">Comprar 1 🎫</button>
+          <button class="btn-gold" style="flex:1;" onclick="exchangeTokens('sell')">Liquidar 1 🎫</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <span>Libro de Órdenes</span>
+          <select id="market-view" onchange="renderOrderBook()" style="background:var(--bg);color:var(--text);border:1px solid var(--border);font-size:9px;">
+            <option value="tomato">🍅 Tomates</option>
+            <option value="egg">🥚 Huevos</option>
+            <option value="wood">🪵 Madera</option>
+            <option value="sauce">🥫 Salsa</option>
+          </select>
+        </div>
+        <div class="book-grid">
+          <div><div style="color:var(--red);font-weight:bold;font-size:8px;">ASKS (Venta)</div><div class="book-side" id="book-asks"></div></div>
+          <div><div style="color:var(--green);font-weight:bold;font-size:8px;">BIDS (Compra)</div><div class="book-side" id="book-bids"></div></div>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:4px;display:flex;gap:3px;">
+          <input type="number" id="order-price" placeholder="Precio" style="background:var(--bg);border:1px solid var(--border);color:#fff;width:50px;font-size:9px;">
+          <input type="number" id="order-qty" placeholder="Cant" value="1" style="background:var(--bg);border:1px solid var(--border);color:#fff;width:40px;font-size:9px;">
+          <button style="flex:1;" class="btn-red" onclick="placeOrder('sell')">Venta</button>
+          <button style="flex:1;" class="btn-green" onclick="placeOrder('buy')">Compra</button>
+          <button class="btn-purple" onclick="sweepMarket()">Barrer</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><span>Operaciones Especiales & Sabotaje</span><span id="caravan-status">Puerto OK</span></div>
+        <div style="display:flex;gap:3px;">
+          <button style="flex:1;" class="btn-gold" onclick="sendCaravan(false)">Caravana Rápida (+130%)</button>
+          <button style="flex:1;" class="btn-purple" onclick="sendCaravan(true)">Con Escolta (-20G)</button>
+        </div>
+        <div style="display:flex;gap:3px;margin-top:2px;">
+          <button style="flex:1;" class="btn-purple" onclick="sabotageBot()">🕵 Hack Traidor_01 (25G)</button>
+          <button style="flex:1;" class="btn-flash" onclick="buySmugglerChest()">🎲 Cofre Contrabando (60G)</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Mis Órdenes en Libro</div>
+        <div id="my-orders" style="display:flex;flex-direction:column;gap:2px;"><div style="color:var(--text-dim);">Sin órdenes abiertas.</div></div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div class="panel">
+        <div class="panel-header"><span>Almacén Central</span><span id="storage-hud">0/10 Slots</span></div>
+        <div id="inventory-box" style="display:flex;flex-direction:column;gap:2px;max-height:140px;overflow-y:auto;"></div>
+        <div style="display:flex;gap:3px;margin-top:auto;">
+          <button onclick="upgradeStorage()" style="flex:1;">Ampliar (+5) [150G]</button>
+          <button id="unfreeze-btn" class="btn-red" style="display:none;" onclick="unfreezeSlots()">Rescatar (40G)</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Línea de Crédito & Rango</div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div style="display:flex;gap:3px;">
+            <button class="btn-red" style="flex:1;" onclick="requestLoan()">Pedir 150G</button>
+            <button class="btn-green" style="flex:1;" onclick="payLoan()">Pagar Deuda</button>
+          </div>
+          <button class="btn-gold" onclick="upgradeMerchantRank()">Subir Rango (<span id="rank-cost">300</span> Oro)</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Contratos de Gremio & Multi-Lote</div>
+        <div id="contracts-box" style="display:flex;flex-direction:column;gap:3px;"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">Terminal de Registro</div>
+        <div class="log-container" id="log-feed"></div>
+      </div>
+    </div>
+  </div>
+  <script src="app1.js"></script>
+  <script src="app2.js"></script>
+</body>
+</html>
